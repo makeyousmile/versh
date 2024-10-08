@@ -10,90 +10,100 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <!-- Bulma Version 1-->
     <link rel="stylesheet" href="https://unpkg.com/bulma@1.0.2/css/bulma.min.css" />
-    <link rel="stylesheet" type="text/css" href="/static/css/hero.css">
     <link rel="stylesheet" href="https://unpkg.com/bulma-modal-fx/dist/css/modal-fx.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/hero.css">
     <script src="https://kit.fontawesome.com/89e51d49bb.js" crossorigin="anonymous"></script>
     <style>
          </style>
 </head>
 <body>
-<nav class="navbar" role="navigation" aria-label="main navigation">
 
-    <div class="navbar-brand">
-        <a class="navbar-item has-text-left" href="/">
+<div class="container">
+    <div class="columns">
+        <div class="column is-12">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
 
-            <svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-                   <path fill-rule="evenodd" clip-rule="evenodd" d="M0 110L10 40L50 0L100 50L70 80L110 120L50 160L0 110Z" fill="#00D1B2"/>
-            </svg>
-           <strong>ООО "Верш" Дорого и сердито</strong>
-        </a>
+                <div class="navbar-brand">
+                    <a class="navbar-item has-text-left" href="/">
 
-    </div>
+                        <svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M0 110L10 40L50 0L100 50L70 80L110 120L50 160L0 110Z" fill="#00D1B2"/>
+                        </svg>
 
-    <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-            <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link">
-                    Каталог
-                </a>
-
-                <div class="navbar-dropdown">
-                    <a class="navbar-item">
-                        тип 1
                     </a>
-                    <a class="navbar-item">
-                        тип 2
-                    </a>
-                    <a class="navbar-item">
-                        тип 3
-                    </a>
-                    <hr class="navbar-divider">
-                    <a class="navbar-item">
-                        тип 4
-                    </a>
+                    <div class="navbar-item"> <strong><a>ООО "Верш" Дорого и сердито</a></strong></div>
+
                 </div>
-            </div>
 
-            <a class="navbar-item">
-                О нас
-            </a>
-            <a class="navbar-item">
-                Оплата и доставка
-            </a>
+                <div id="navbarBasicExample2" class="navbar-menu">
+                    <div class="navbar-start">
+                        <div class="navbar-item has-dropdown is-hoverable">
+                            <div class="navbar-link">
+                                <a>Каталог</a>
+                            </div>
 
-        </div>
+                            <div class="navbar-dropdown">
+                                <a class="navbar-item">
+                                    тип 1
+                                </a>
+                                <a class="navbar-item">
+                                    тип 2
+                                </a>
+                                <a class="navbar-item">
+                                    тип 3
+                                </a>
+                                <hr class="navbar-divider">
+                                <a class="navbar-item">
+                                    тип 4
+                                </a>
+                            </div>
+                        </div>
+                        <div class="navbar-item">
+                            <a><strong>Подобрать фильтр</strong></a>
+                        </div>
+                        <div class="navbar-item">
+                            <a><strong>О нас</strong></a>
+                        </div>
+                        <div class="navbar-item">
+                            <a>Оплата и доставка</a>
+                        </div>
 
-        <div class="navbar-end">
-            <div class="navbar-item">
-                <i class="fa-brands fa-telegram"></i>
-                <i class="fas fa-phone-alt"></i>
-                <a href="tel:+375299047668"> +375 29 9047668</a>
-                <span class="button  modal-button is-primary" data-target="telegram-card">Заказать обратную связь</span>
-            </div>
+                    </div>
+
+                    <div class="navbar-end">
+                        <div class="navbar-item">
+                            <i class="fa-brands fa-telegram"></i>
+                            <i class="fas fa-phone-alt"></i>
+                            <a href="tel:+375299047668"> +375 29 9047668</a>
+                            <span class="button  modal-button is-primary" data-target="telegram-card">Заказать обратную связь</span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
         </div>
     </div>
-</nav>
-<section class="hero is-info is-small">
-    <div class="hero-body">
-        <div class="container has-text-centered">
-            <p class="title">
-{{ .Title }}
+</div>
+<div class="container">
+    <div class="columns">
+        <div class="column is-6">
+            <div class="is-size-2 has-text-centered">
+                <h1>Новинки</h1>
+            </div>
 
         </div>
+        <div class="column is-6"><img src="static/images/qgelx5erxddsges48aldp1w349ofe2ll.png.webp"></div>
     </div>
-</section>
-<div class="box">
-    <p class="has-text-centered">
-        <span class="tag is-primary">New</span> Что то про акции скидки новые поступления
-    </p>
 </div>
 <section class="container">
+    <div class="is-size-2 has-text-centered">
+       <h1>Каталог</h1>
+    </div>
     <div class="columns features">
         <div class="column is-3">
             <div class="card is-shady">
                 <div class="card-image">
                     <figure class="image is-4by3">
-                        <img src="/static/images/1-top11.jpg" alt="Placeholder image">
+                        <img src="static/images/qgelx5erxddsges48aldp1w349ofe2ll.png.webp" alt="Placeholder image">
                     </figure>
                 </div>
                 <div class="card-content">
@@ -109,7 +119,7 @@
             <div class="card is-shady">
                 <div class="card-image">
                     <figure class="image is-4by3">
-                        <img src="/static/images/1-top11.jpg" alt="Placeholder image">
+                        <img src="static/images/qgelx5erxddsges48aldp1w349ofe2ll.png.webp" alt="Placeholder image">
                     </figure>
                 </div>
                 <div class="card-content">
@@ -125,7 +135,7 @@
             <div class="card is-shady">
                 <div class="card-image">
                     <figure class="image is-4by3">
-                        <img src="/static/images/1-top11.jpg" alt="Placeholder image">
+                        <img src="static/images/qgelx5erxddsges48aldp1w349ofe2ll.png.webp" alt="Placeholder image">
                     </figure>
                 </div>
                 <div class="card-content">
@@ -141,7 +151,7 @@
             <div class="card is-shady">
                 <div class="card-image">
                     <figure class="image is-4by3">
-                        <img src="/static/images/1-top11.jpg" alt="Placeholder image">
+                        <img src="static/images/qgelx5erxddsges48aldp1w349ofe2ll.png.webp" alt="Placeholder image">
                     </figure>
                 </div>
                 <div class="card-content">
@@ -160,7 +170,7 @@
             <div class="card is-shady">
                 <div class="card-image">
                     <figure class="image is-4by3">
-                        <img src="/static/images/1-top11.jpg" alt="Placeholder image">
+                        <img src="static/images/qgelx5erxddsges48aldp1w349ofe2ll.png.webp" alt="Placeholder image">
                     </figure>
                 </div>
                 <div class="card-content">
@@ -176,7 +186,7 @@
             <div class="card is-shady">
                 <div class="card-image">
                     <figure class="image is-4by3">
-                        <img src="/static/images/1-top11.jpg" alt="Placeholder image">
+                        <img src="static/images/qgelx5erxddsges48aldp1w349ofe2ll.png.webp" alt="Placeholder image">
                     </figure>
                 </div>
                 <div class="card-content">
@@ -192,7 +202,7 @@
             <div class="card is-shady">
                 <div class="card-image">
                     <figure class="image is-4by3">
-                        <img src="/static/images/1-top11.jpg" alt="Placeholder image">
+                        <img src="static/images/qgelx5erxddsges48aldp1w349ofe2ll.png.webp" alt="Placeholder image">
                     </figure>
                 </div>
                 <div class="card-content">
@@ -208,7 +218,7 @@
             <div class="card is-shady">
                 <div class="card-image">
                     <figure class="image is-4by3">
-                        <img src="/static/images/1-top11.jpg" alt="Placeholder image">
+                        <img src="static/images/qgelx5erxddsges48aldp1w349ofe2ll.png.webp" alt="Placeholder image">
                     </figure>
                 </div>
                 <div class="card-content">

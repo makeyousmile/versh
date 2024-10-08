@@ -3,11 +3,15 @@
     ::-webkit-scrollbar{height:10px;width:10px}::-webkit-scrollbar-track{background:#efefef;border-radius:6px}::-webkit-scrollbar-thumb{background:#d5d5d5;border-radius:6px}::-webkit-scrollbar-thumb:hover{background:#c4c4c4}
 }
 html,body {
-
+    --bulma-navbar-item-color: hsl(221deg 39.68% 26.6%);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-    --bulma-link: black;
-    --bulma-link-text: black;
-    --bulma-body-color: #1b222d;
+
+    --bulma-link-text: #dfdddd;
+    --bulma-body-color: #dfdddd;
+    --bulma-background: #1b222d;
+    --bulma-scheme-main: #1b222d;
+    --bulma-navbar-background-color: #1b222d;
+
     background: #1b222d;
 }
 
@@ -15,10 +19,10 @@ html,body {
     max-width: 700px;
 }
 .hero-body .title {
-    color: hsl(192,17%,99%) !important;
+    color: var(--bulma-body-color) !important;
 }
 .hero-body .subtitle {
-    color: hsl(192,17%,99%) !important;
+    color: var(--bulma-body-color) !important;
     padding-top: 2rem;
     line-height: 1.5;
 }
@@ -63,7 +67,7 @@ html,body {
 }
 .is-shady {
     animation: flyintoright .4s backwards;
-    background: #fff;
+    background: #3c6475;
     box-shadow: rgba(0, 0, 0, .1) 0 1px 0;
     border-radius: 4px;
     display: inline-block;
