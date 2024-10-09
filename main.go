@@ -1,5 +1,6 @@
 package main
 
 func main() {
-	startHttpServer()
+	//startHttpServer()
+	ReadExcel("export.xlsx")
 }
