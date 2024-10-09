@@ -1,0 +1,23 @@
+{{define "products"}}
+<div class="columns features">
+  {{ range $element := .Products }}
+   <div class="column is-3">
+    <div class="card is-shady">
+      <div class="card-image">
+        <figure class="image is-4by3">
+          <img src="/static/images/qgelx5erxddsges48aldp1w349ofe2ll.png.webp" alt="Placeholder image">
+        </figure>
+      </div>
+      <div class="card-content">
+        <div class="content">
+          <h4>{{ .Name }}</h4>
+          <p>{{ .Description}}</p>
+          <span class="button  modal-button is-primary" data-target="modal-card">подробнее</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{ end }}
+
+</div>
+{{end}}

@@ -6,10 +6,16 @@ import (
 	"net/http"
 )
 
+type Page struct {
+	Products []Product
+	Title    string
+	Rows     int
+}
+
 func handler(w http.ResponseWriter, r *http.Request) {
 	// Получаем имя файла из URL
 
-	tmpl, err := template.ParseFiles("static/index.html")
+	tmpl, err := template.ParseFiles("static/index.html", "static/products.html")
 	if err != nil {
 		http.Error(w, "File not found or unable to load template", http.StatusNotFound)
 		log.Println("Error loading template:", err)
@@ -17,14 +23,22 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Данные для передачи в шаблон (при необходимости)
-	data := struct {
-		Title string
-	}{
-		Title: "Подобрать фильтр",
+	data := Product{
+		Name:        "Test",
+		Description: "Testsdvvvvv vvvvvvvv vvvvvvvvv vvvvvvvvvvvvvv vvvvvvv vvvvvvvvvvv vvvvvvvvvvvvvvv vvvvvvvvv vvvvvvvv vvvvvvvv vvvvvvvvvvvvvvv",
 	}
-
+	prod := []Product{}
+	prod = append(prod, data)
+	prod = append(prod, data)
+	prod = append(prod, data)
+	prod = append(prod, data)
+	prod = append(prod, data)
+	page := Page{
+		Products: prod,
+		Title:    "",
+	}
 	// Рендерим шаблон с данными
-	err = tmpl.Execute(w, data)
+	err = tmpl.Execute(w, page)
 	if err != nil {
 		http.Error(w, "Unable to render template", http.StatusInternalServerError)
 		log.Println("Error rendering template:", err)
