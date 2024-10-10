@@ -11,8 +11,20 @@ html,body {
     --bulma-background: #1b222d;
     --bulma-scheme-main: #1b222d;
     --bulma-navbar-background-color: #1b222d;
-
+    --bulma-strong-color: #F5F5F5;
+    --bulma-text-strong: #F5F5F5;
+    --bulma-label-color: #F5F5F5;
     background: #1b222d;
+    color: #F5F5F5;
+}
+.container{
+    color: #F5F5F5;
+}
+.title{
+    color: #F5F5F5;
+}
+.subtitle{
+    color: #F5F5F5;
 }
 
 .hero-body .container {
@@ -45,21 +57,24 @@ html,body {
     font-size: 14px;
     margin: 1rem 1rem;
 }
+.card .title, .card .content {
+    color: #dfdddd;
+}
 .card-content .content h4 {
     font-size: 16px;
     font-weight: 700;
 }
 .card {
     transition: transform 0.3s ease;
-}
-
-.card:hover {
-    transform: scale(1.05);
-}
-.card {
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.18);
     margin-bottom: 2rem;
+    background: #131b27;
 }
+
+.hover:hover {
+    transform: scale(1.05);
+}
+
 .intro {
     padding: 5rem 0;
     text-align: center;
@@ -93,9 +108,7 @@ footer li:before {
     margin-left: -1.5em;
     color: #147efb;
 }
-.bulma-navbar-dropdown-arrow{
-    color: aquamarine;
-}
+
 .columns:nth-child(2){
     margin-top: 0rem;
 }

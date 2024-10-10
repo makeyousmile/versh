@@ -13,9 +13,8 @@ type Page struct {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	// Получаем имя файла из URL
 
-	tmpl, err := template.ParseFiles("static/index.html", "static/products.html")
+	tmpl, err := template.ParseFiles("static/index.html", "static/products.html", "static/head.html", "static/footer.html", "static/filter.html")
 	if err != nil {
 		http.Error(w, "File not found or unable to load template", http.StatusNotFound)
 		log.Println("Error loading template:", err)
