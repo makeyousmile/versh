@@ -1,22 +1,27 @@
 {{define "products"}}
-<div class="columns features">
+<div class="columns is-multiline">
   {{ range $element := .Products }}
-   <div class="column is-3">
-    <div class="card is-shady">
+  <div class="column is-one-quarter">
+    <div class="card">
       <div class="card-image">
         <figure class="image is-4by3">
-          <img src="/static/images/qgelx5erxddsges48aldp1w349ofe2ll.png.webp" alt="Placeholder image">
+          <img src="/static/images/qgelx5erxddsges48aldp1w349ofe2ll.png.webp" alt="Product 1">
         </figure>
       </div>
       <div class="card-content">
+        <div class="media">
+          <div class="media-content">
+            <p class="title is-4">{{ .Name }}</p>
+          </div>
+        </div>
         <div class="content">
-          <h4>{{ .Name }}</h4>
-          <p>{{ .Description}}</p>
-          <span class="button  modal-button is-primary" data-target="modal-card">подробнее</span>
+          {{ .Description }}
+          <br><strong>Price:  ${{ .Price }}</strong>
         </div>
       </div>
     </div>
   </div>
+
   {{ end }}
 
 </div>

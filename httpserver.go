@@ -26,6 +26,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	data := Product{
 		Name:        "Test",
 		Description: "Testsdvvvvv vvvvvvvv vvvvvvvvv vvvvvvvvvvvvvv vvvvvvv vvvvvvvvvvv vvvvvvvvvvvvvvv vvvvvvvvv vvvvvvvv vvvvvvvv vvvvvvvvvvvvvvv",
+		Price:       99,
 	}
 	prod := []Product{}
 	prod = append(prod, data)
