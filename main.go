@@ -2,5 +2,7 @@ package main
 
 func main() {
 	startHttpServer()
-	//ReadExcel("export.xlsx")
+	p := ReadExcel("export.xlsx")
+	getCategories(p)
+	//log.Print(p[0].ImageURL)
 }

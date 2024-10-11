@@ -1,32 +1,4 @@
-{{define "products"}}
-<section class="container">
-  <div class="is-size-2 has-text-centered">
-    <h1>Каталог</h1>
-  </div>
-<div class="columns is-multiline">
-  {{ range $element := .Products }}
-  <div class="column is-one-quarter">
-    <div class="card hover">
-      <div class="card-image">
-        <figure class="image is-4by3">
-          <img src="/static/images/qgelx5erxddsges48aldp1w349ofe2ll.png.webp" alt="Product 1">
-        </figure>
-      </div>
-      <div class="card-content">
-        <div class="media">
-          <div class="media-content">
-            <p class="title is-4">{{ .Name }}</p>
-          </div>
-        </div>
-        <div class="content">
-          {{ .Description }}
-          <br><strong>Price:  ${{ .Price }}</strong>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  {{ end }}
-</div>
-</section>
-{{end}}
+{{template "head"}}
+{{ template "products" . }}
+{{template "footer"}}
