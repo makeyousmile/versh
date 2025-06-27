@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"html/template"
 	"log"
 	"net/http"
@@ -13,6 +13,9 @@ type Page struct {
 	Title      string
 	Rows       int
 	Categories []string
+	Name       string
+	Price      string
+	ImageURL   string
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -28,7 +31,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	products := ReadExcel("export.xlsx")
 	page := Page{
 		Products:   products,
-		Title:      "",
+		Title:      "Test",
 		Categories: getCategories(products),
 	}
 	// Рендерим шаблон с данными
@@ -51,7 +54,7 @@ func productsHandler(w http.ResponseWriter, r *http.Request) {
 
 	page := Page{
 		Products: ReadExcel("export.xlsx"),
-		Title:    "",
+		Title:    "Test",
 	}
 	// Рендерим шаблон с данными
 	err = tmpl.Execute(w, page)
@@ -69,13 +72,32 @@ func productHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Product ID is missing", http.StatusBadRequest)
 		return
 	}
+	tmpl, err := template.ParseFiles("static/product.html", "static/product.gohtml", "static/head.gohtml", "static/footer.gohtml")
+	if err != nil {
+		http.Error(w, "File not found or unable to load template", http.StatusNotFound)
+		log.Println("Error loading template:", err)
+		return
+	}
+	products := ReadExcel("export.xlsx")
+	product, err := FindProductByCode(products, id)
+	if err != nil {
+		http.Error(w, "Product not found", http.StatusNotFound)
+	}
 
-	// Формируем сообщение с названием товара
-	productInfo := fmt.Sprintf("Product ID: %s", id)
+	page := Page{
+		Products: products,
+		Title:    product.Name,
+		Name:     product.Name,
+		Price:    product.Price,
+		ImageURL: product.ImageURL,
+	}
 
-	// Выводим информацию о товаре
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(productInfo))
+	err = tmpl.Execute(w, page)
+	if err != nil {
+		log.Println("Error rendering template:", err)
+		http.Error(w, "Unable to render template", http.StatusInternalServerError)
+	}
+
 }
 func filterHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("static/filter.html", "static/head.gohtml", "static/footer.gohtml", "static/filter.gohtml")
@@ -109,4 +131,12 @@ func startHttpServer() {
 		log.Fatal(err)
 	}
 
+}
+func FindProductByCode(products []Product, code string) (Product, error) {
+	for _, product := range products {
+		if product.Code == code {
+			return product, nil
+		}
+	}
+	return Product{}, errors.New("product not found")
 }
