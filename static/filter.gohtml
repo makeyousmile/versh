@@ -1,192 +1,209 @@
 {{define "filter"}}
-<section class="section">
-    <div class="container is-8 is-centered form-container">
-        <h1 class="title has-text-centered">Подбор оборудования</h1>
-        <p class="subtitle has-text-centered">Расскажите о состоянии вашей воды, и наши эксперты бесплатно подберут оборудование по вашим индивидуальным параметрам</p>
+    <section class="section">
+        <div class="container is-8 is-centered form-container">
+            <h1 class="title has-text-centered">Подбор оборудования</h1>
+            <p class="subtitle has-text-centered">Расскажите о состоянии вашей воды, и наши эксперты бесплатно подберут
+                оборудование по вашим индивидуальным параметрам</p>
 
-        <form>
-            <!-- 1. Данные покупателя -->
-            <h2 class="title is-5">1. Данные покупателя</h2>
+            <form action="/submit" method="post" enctype="multipart/form-data" id="form">
+                <!-- 1. Данные покупателя -->
+                <h2 class="title is-5">1. Данные покупателя</h2>
 
-            <!-- ФИО и Телефон -->
-            <div class="columns">
-                <div class="column">
-                    <div class="field">
-                        <label class="label">ФИО</label>
-                        <div class="control">
-                            <input class="input" type="text" placeholder="Введите ваше ФИО">
+                <!-- ФИО и Телефон -->
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">ФИО</label>
+                            <div class="control">
+                                <input class="input" name="name" type="text" placeholder="Введите ваше ФИО">
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Телефон</label>
-                        <div class="control">
-                            <input class="input" type="tel" placeholder="Введите ваш телефон">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Email и Город -->
-            <div class="columns">
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Email</label>
-                        <div class="control">
-                            <input class="input" type="email" placeholder="Введите ваш email">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Город</label>
-                        <div class="control">
-                            <input class="input" type="text" placeholder="Введите ваш город">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. Информация о состоянии воды -->
-            <h2 class="title is-5">2. Информация о состоянии воды</h2>
-
-            <!-- Где живете и Какой у вас источник водоснабжения -->
-            <div class="columns">
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Где живете</label>
-                        <div class="control">
-                            <div class="select">
-                                <select>
-                                    <option>Дом</option>
-                                    <option>Коттедж</option>
-                                    <option>Квартира</option>
-                                </select>
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Телефон</label>
+                            <div class="control">
+                                <input class="input" name="phone" type="tel" placeholder="Введите ваш телефон">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Какой у вас источник водоснабжения?</label>
-                        <div class="control">
-                            <div class="select">
-                                <select>
-                                    <option>Скважина</option>
-                                    <option>Колодец</option>
-                                    <option>Центральное водоснабжение</option>
-                                </select>
+                <!-- Email и Город -->
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Email</label>
+                            <div class="control">
+                                <input class="input" name="email" type="email" placeholder="Введите ваш email">
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Какие у вас проблемы с водой и Сколько в доме точек водоразбора -->
-            <div class="columns">
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Какие у вас проблемы с водой?</label>
-                        <div class="control">
-                            <div class="select">
-                                <select>
-                                    <option>Жесткость</option>
-                                    <option>Накипь</option>
-                                    <option>Неприятный запах</option>
-                                    <option>Железо</option>
-                                    <option>Цветность</option>
-                                    <option>Другое</option>
-                                </select>
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Город</label>
+                            <div class="control">
+                                <input class="input" name="city" type="text" placeholder="Введите ваш город">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Сколько в доме точек водоразбора?</label>
-                        <div class="control">
-                            <input class="input" type="number" placeholder="Введите количество точек водоразбора">
+                <!-- 2. Информация о состоянии воды -->
+                <h2 class="title is-5">2. Информация о состоянии воды</h2>
+
+                <!-- Где живете и Какой у вас источник водоснабжения -->
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Тип</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select name="housing_type" class="select">
+                                        <option name="housing_type">Дом (коттедж)</option>
+                                        <option name="housing_type">Квартира</option>
+                                        <option name="housing_type">Офис</option>
+                                        <option name="housing_type">Другое</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Сколько в доме жильцов и Тип канализации -->
-            <div class="columns">
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Сколько в доме жильцов?</label>
-                        <div class="control">
-                            <input class="input" type="number" placeholder="Введите количество жильцов">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Тип канализации</label>
-                        <div class="control">
-                            <div class="select">
-                                <select>
-                                    <option>Выгребная яма</option>
-                                    <option>Центральная</option>
-                                    <option>Септик</option>
-                                </select>
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Какой у вас источник водоснабжения?</label>
+                            <div class="control">
+                                <div class="select">
+                                    <label>
+                                        <select name="water_source">
+                                            <option name="water_source">Скважина</option>
+                                            <option name="water_source">Колодец</option>
+                                            <option name="water_source">Центральное водоснабжение</option>
+                                        </select>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Дополнительные постройки -->
-            <div class="field">
-                <label class="label">Дополнительные постройки</label>
-                <div class="control">
-                    <input class="input" type="text" placeholder="Укажите дополнительные постройки (если есть)">
+                <!-- Какие у вас проблемы с водой и Сколько в доме точек водоразбора -->
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Какие у вас проблемы с водой?</label>
+                            <div class="control">
+                                <label class="checkbox">
+                                    <input type="checkbox" name="water_issues" value="Жесткость"> Жесткость
+                                </label><br>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="water_issues" value="Накипь"> Накипь
+                                </label><br>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="water_issues" value="Неприятный запах"> Неприятный
+                                    запах
+                                </label><br>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="water_issues" value="Железо"> Железо
+                                </label><br>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="water_issues" value="Цветность"> Цветность
+                                </label><br>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="water_issues" value="ПМО"> Перманганатная окисляемость
+                                    (ПМО)
+                                </label><br>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="water_issues" value="Другое"> Другое
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Сколько в доме точек водоразбора?</label>
+                            <div class="control">
+                                <input class="input" name="tap_points" type="number"
+                                       placeholder="Введите количество точек водоразбора" style="width: 275px">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- 3. У вас есть анализ воды? -->
-            <h2 class="title is-5">3. У вас есть анализ воды?</h2>
 
-            <!-- Загрузка файла -->
-            <div class="field">
-                <div class="file has-name">
-                    <label class="file-label">
-                        <input class="file-input" type="file" name="water_analysis">
-                        <span class="file-cta">
+                <!-- Сколько в доме жильцов и Тип канализации -->
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Сколько в доме жильцов?</label>
+                            <div class="control">
+                                <input class="input" name="residents" type="number" placeholder="" style="width: 170px">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Тип канализации</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select name="sewer_type">
+                                        <option name="sewer_type">Выгребная яма</option>
+                                        <option name="sewer_type">Центральная</option>
+                                        <option name="sewer_type">Септик</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Дополнительные постройки -->
+
+
+                <!-- 3. У вас есть анализ воды? -->
+                <h2 class="title is-5">3. У вас есть анализ воды?</h2>
+
+                <!-- Загрузка файла -->
+                <div class="field">
+                    <div class="file has-name">
+                        <label class="file-label">
+                            <input class="file-input" type="file" name="water_analysis">
+                            <span class="file-cta">
                                 <span class="file-icon">
                                     <i class="fas fa-upload"></i>
                                 </span>
                                 <span class="file-label">Прикрепить файл</span>
                             </span>
-                        <span class="file-name">Файл не выбран</span>
-                    </label>
+                            <!--<span class="file-name" style="background-color: #b7b7b7">Файл не выбран</span>-->
+                        </label>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Политика безопасности и кнопка отправки -->
-            <div class="field">
-                <div class="control">
-                    <label class="checkbox">
-                        <input type="checkbox" required>
-                        Нажимая на кнопку «Отправить», я даю согласие на обработку моих персональных данных в соответствии с политикой информационной безопасности.
-                    </label>
+                <!-- Политика безопасности и кнопка отправки -->
+                <div class="field">
+                    <div class="control">
+                        <label class="checkbox">
+                            <input type="checkbox" required>
+                            Нажимая на кнопку «Отправить», я даю согласие на обработку моих персональных данных в
+                            соответствии с политикой информационной безопасности.
+                        </label>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Кнопка отправить -->
-            <div class="field">
-                <div class="control has-text-centered">
-                    <button class="button is-primary">Отправить</button>
+                <!-- Кнопка отправить -->
+                <div class="field">
+                    <div class="control has-text-centered">
+                        <button class="button is-primary">Отправить</button>
+                        <span class="button  modal-button is-primary " onclick="sendForm()">Отправить сообщение</span>
+
+                    </div>
                 </div>
-            </div>
-        </form>
-    </div>
-</section>
+            </form>
+        </div>
+    </section>
 {{ end }}

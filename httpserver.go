@@ -1,21 +1,36 @@
 package main
 
 import (
-	"errors"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 )
 
+type Categories struct {
+	CatCyrillic string
+	CatLatin    string
+}
 type Page struct {
 	Products   []Product
+	Product    Product
 	Title      string
 	Rows       int
-	Categories []string
-	Name       string
-	Price      string
-	ImageURL   string
+	Categories []Categories
+}
+type FormData struct {
+	Name        string
+	Phone       string
+	Email       string
+	City        string
+	HousingType string
+	WaterSource string
+	WaterIssues []string
+	TapPoints   string
+	Residents   string
+	SewerType   string
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -28,14 +43,12 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Данные для передачи в шаблон (при необходимости)
-	products := ReadExcel("export.xlsx")
-	page := Page{
-		Products:   products,
-		Title:      "Test",
-		Categories: getCategories(products),
-	}
+	tmpPage := page
+	tmpPage.Products = getPopularProducts(tmpPage.Products)
+	tmpPage.Title = "Популярные товары"
+
 	// Рендерим шаблон с данными
-	err = tmpl.Execute(w, page)
+	err = tmpl.Execute(w, tmpPage)
 	if err != nil {
 		http.Error(w, "Unable to render template", http.StatusInternalServerError)
 		log.Println("Error rendering template:", err)
@@ -52,12 +65,10 @@ func productsHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Данные для передачи в шаблон (при необходимости)
 
-	page := Page{
-		Products: ReadExcel("export.xlsx"),
-		Title:    "Test",
-	}
+	tmpPage := page
+	tmpPage.Title = "Каталог"
 	// Рендерим шаблон с данными
-	err = tmpl.Execute(w, page)
+	err = tmpl.Execute(w, tmpPage)
 	if err != nil {
 		http.Error(w, "Unable to render template", http.StatusInternalServerError)
 		log.Println("Error rendering template:", err)
@@ -78,21 +89,13 @@ func productHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("Error loading template:", err)
 		return
 	}
-	products := ReadExcel("export.xlsx")
-	product, err := FindProductByCode(products, id)
-	if err != nil {
+	tmpPage := page
+	tmpPage.Product = FindProductByCode(tmpPage.Products, id)
+	if tmpPage.Product.Name == "" {
 		http.Error(w, "Product not found", http.StatusNotFound)
 	}
 
-	page := Page{
-		Products: products,
-		Title:    product.Name,
-		Name:     product.Name,
-		Price:    product.Price,
-		ImageURL: product.ImageURL,
-	}
-
-	err = tmpl.Execute(w, page)
+	err = tmpl.Execute(w, tmpPage)
 	if err != nil {
 		log.Println("Error rendering template:", err)
 		http.Error(w, "Unable to render template", http.StatusInternalServerError)
@@ -107,23 +110,92 @@ func filterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	page := Page{
-		Title: "Фильтр",
-	}
+	tmpPage := page
+	tmpPage.Title = "Фильтр"
 	// Рендерим шаблон с данными
-	err = tmpl.Execute(w, page)
+	err = tmpl.Execute(w, tmpPage)
 	if err != nil {
 		http.Error(w, "Unable to render template", http.StatusInternalServerError)
 		log.Println("Error rendering template:", err)
 		return
 	}
 }
+func categoriesHandler(w http.ResponseWriter, r *http.Request) {
+	cat := strings.TrimPrefix(r.URL.Path, "/categories/")
+	if cat == "" {
+		http.Error(w, "Category is missing", http.StatusBadRequest)
+		return
+	}
+	tmpl, err := template.ParseFiles("static/products.html", "static/products.gohtml", "static/head.gohtml", "static/footer.gohtml", "static/filter.gohtml")
+	if err != nil {
+		http.Error(w, "File not found or unable to load template", http.StatusNotFound)
+		log.Println("Error loading template:", err)
+		return
+	}
+
+	// Данные для передачи в шаблон (при необходимости)
+	tmpPage := page
+
+	tmpPage.Products = FindProductByCat(tmpPage.Products, cat)
+	if len(tmpPage.Products) > 0 {
+		tmpPage.Title = tmpPage.Products[0].GroupName
+	}
+	// Рендерим шаблон с данными
+	err = tmpl.Execute(w, tmpPage)
+	if err != nil {
+		http.Error(w, "Unable to render template", http.StatusInternalServerError)
+		log.Println("Error rendering template:", err)
+		return
+	}
+}
+
+func formHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		r.ParseMultipartForm(10 << 20) // 10 MB max file size
+
+		data := FormData{
+			Name:        r.FormValue("name"),
+			Phone:       r.FormValue("phone"),
+			Email:       r.FormValue("email"),
+			City:        r.FormValue("city"),
+			HousingType: r.FormValue("housing_type"),
+			WaterSource: r.FormValue("water_source"),
+			WaterIssues: r.Form["water_issues"], // multiple checkboxes
+			TapPoints:   r.FormValue("tap_points"),
+			Residents:   r.FormValue("residents"),
+			SewerType:   r.FormValue("sewer_type"),
+		}
+
+		// Handle file upload
+		file, handler, err := r.FormFile("water_analysis")
+		if err != nil {
+			log.Println(err)
+		}
+		defer file.Close()
+		f, err := os.Create("./uploads/" + handler.Filename)
+		if err != nil {
+			log.Println(err)
+		}
+		_, _ = f.ReadFrom(file)
+		defer f.Close()
+
+		fmt.Fprintf(w, "Спасибо! Данные получены:\n%+v", data)
+		log.Println(data.SewerType)
+		return
+	}
+
+	tmpl := template.Must(template.ParseFiles("filter 1.html"))
+	tmpl.Execute(w, nil)
+}
+
 func startHttpServer() {
 	// Определяем обработчик для всех маршрутов
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/products", productsHandler)
 	http.HandleFunc("/product/", productHandler)
 	http.HandleFunc("/filter/", filterHandler)
+	http.HandleFunc("/categories/", categoriesHandler)
+	http.HandleFunc("/submit", formHandler)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 	// Запускаем сервер на порту 8080
 	log.Println("Starting server on :80")
@@ -131,12 +203,4 @@ func startHttpServer() {
 		log.Fatal(err)
 	}
 
-}
-func FindProductByCode(products []Product, code string) (Product, error) {
-	for _, product := range products {
-		if product.Code == code {
-			return product, nil
-		}
-	}
-	return Product{}, errors.New("product not found")
 }

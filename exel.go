@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/xuri/excelize/v2"
+	"log"
 )
 
 // Product представляет структуру товара с указанными полями
@@ -173,17 +174,64 @@ func ReadExcel(path string) []Product {
 	}
 	return products
 }
-func getCategories(products []Product) []string {
+func getCats(products []Product) []Categories {
 	categories := make([]string, 0)
 	cat := make(map[string]bool)
 
 	for _, product := range products {
 		cat[product.GroupName] = true
+		log.Printf(product.Name)
 	}
 
 	for c, _ := range cat {
 		categories = append(categories, c)
 	}
 
-	return categories
+	return getCatFromNames(categories)
 }
+func getCatFromNames(catNames []string) []Categories {
+	cats := make([]Categories, 0)
+	for _, catName := range catNames {
+		cat := Categories{}
+		cat.CatCyrillic = catName
+		cat.CatLatin = Transliterate(catName)
+		cats = append(cats, cat)
+	}
+	return cats
+}
+func getPopularProducts(products []Product) []Product {
+	tmpProducts := make([]Product, 0)
+	for _, product := range products {
+		if product.GroupIdentifier != "" {
+			tmpProducts = append(tmpProducts, product)
+		}
+	}
+
+	return tmpProducts
+}
+
+func FindProductByCode(products []Product, code string) Product {
+	for _, product := range products {
+		if product.Code == code {
+			return product
+		}
+	}
+	return Product{}
+}
+func FindProductByCat(products []Product, cat string) []Product {
+	var catProducts []Product
+	for _, product := range products {
+		if Transliterate(product.GroupName) == cat {
+			catProducts = append(catProducts, product)
+		}
+	}
+	return catProducts
+}
+
+//func getGetCatLatin(cat []string) []string{
+//	var latin []string
+//	for _, value := range cat {
+//		latin = append(latin, Transliterate(value))
+//	}
+//	return latin
+//}

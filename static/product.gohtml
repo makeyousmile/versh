@@ -1,22 +1,31 @@
 {{define "product"}}
-<div class="column is-one-quarter">
-    <div class="card hover">
-        <div class="card-image">
-            <figure class="image is-4by3">
-                <img src="{{.ImageURL}}" alt="Product 1">
-            </figure>
-        </div>
-        <div class="card-content">
-            <div class="media">
-                <div class="media-content">
-                    <p class="title is-5">{{.Name}}</p>
-                </div>
-            </div>
-            <div class="content">
+    <div class="container">
+        <div class="columns is-vcentered mt-6">
+            <div class="column is-half">
+                <figure class="image is-4by3">
 
-                <br><strong>Цена:  {{.Price}} byn</strong>
+                    <img src="{{.Product.ImageURL}}" alt="{{.Product.ImageURL}}">
+
+                </figure>
             </div>
+            <div class="column is-half">
+                <h1 class="title">{{.Product.Name}}</h1>
+                <p class="subtitle">Цена: <strong>{{.Product.Price}} BYN</strong></p>
+                <p class="mb-4">Идеально подходит для систем водоочистки, повышенной мягкости и долговечности.
+                    Совместима с большинством стандартных установок умягчения воды.</p>
+                <button class="button is-primary is-large">Заказать</button>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="content mt-6">
+            <h2 class="title is-4">Описание</h2>
+            <p>
+                Смола Катилакс Super Soft — это высокоэффективная ионообменная смола, предназначенная для удаления ионов
+                кальция и магния, вызывающих жесткость воды.
+                Она отличается увеличенным сроком службы, высокой емкостью и стойкостью к механическим повреждениям.
+            </p>
         </div>
     </div>
-</div>
 {{end}}

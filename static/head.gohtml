@@ -1,102 +1,111 @@
 {{define "head"}}
-  <!DOCTYPE html>
-  <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="images/fav_icon.png" type="image/x-icon">
-    <title>{{.Title}}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <!-- Bulma Version 1-->
-    <link rel="stylesheet" href="https://unpkg.com/bulma@1.0.2/css/bulma.min.css" />
-    <link rel="stylesheet" href="https://unpkg.com/bulma-modal-fx/dist/css/modal-fx.min.css" />
-    <link rel="stylesheet" type="text/css" href="/static/css/hero.css">
-    <script src="https://kit.fontawesome.com/89e51d49bb.js" crossorigin="anonymous"></script>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="static/images/fav_icon.png" type="image/x-icon">
+        <title>{{.Title}}</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <!-- Bulma Version 1-->
+        <link rel="stylesheet" href="https://unpkg.com/bulma@1.0.2/css/bulma.min.css"/>
+        <link rel="stylesheet" href="https://unpkg.com/bulma-modal-fx/dist/css/modal-fx.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/hero.css">
+        <script src="https://kit.fontawesome.com/89e51d49bb.js" crossorigin="anonymous"></script>
 
-  </head>
-  <body>
-<div class="container">
-  <div class="columns">
-    <div class="column is-12">
-      <nav class="navbar" role="navigation" aria-label="main navigation">
-
-        <div class="navbar-brand">
-          <a class="navbar-item has-text-left" href="/">
-
-            <svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M0 110L10 40L50 0L100 50L70 80L110 120L50 160L0 110Z" fill="#00D1B2"/>
-            </svg>
-
-          </a>
-          <div class="navbar-item"> <strong><a href="/">ООО "Верш" Дорого и сердито</a></strong></div>
-
+    </head>
+    <body>
+    <div class="spotlight-container">
+        <div class="spotlight-overlay">
         </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-12">
+                <nav class="navbar" role="navigation" aria-label="main navigation">
 
-        <div id="navbarBasicExample2" class="navbar-menu">
-          <div class="navbar-start">
-            <div class="navbar-item has-dropdown is-hoverable">
-              <div class="navbar-link">
-                <a href="/products">Каталог</a>
-              </div>
+                    <div class="navbar-brand">
+                        <a class="navbar-item has-text-left" href="/">
 
-              <div class="navbar-dropdown">
-                {{ range .Categories}}
-                <a class="navbar-item">
-                  {{.}}
-                </a>
-                  {{end}}
-              </div>
-            </div>
-            <div class="navbar-item">
-              <a href="/filter">Подобрать фильтр</a>
-            </div>
-            <div class="navbar-item">
-              <a>О нас</a>
-            </div>
-            <div class="navbar-item">
-              <a>Оплата и доставка</a>
-            </div>
+                            <svg width="160" height="160" viewBox="0 0 160 160" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                      d="M0 110L10 40L50 0L100 50L70 80L110 120L50 160L0 110Z" fill="#00D1B2"/>
+                            </svg>
 
-          </div>
+                        </a>
+                        <div class="navbar-item"><strong><a href="/">ООО "Верш" Дорого и сердито</a></strong></div>
 
-          <div class="navbar-end">
-            <div class="navbar-item">
-              <i class="fa-brands fa-telegram"></i>
-              <i class="fas fa-phone-alt"></i>
-              <a href="tel:+375299047668"> +375 29 9047668</a>
-              <span class="button  modal-button " data-target="telegram-card">Заказать обратную связь</span>
+                    </div>
+
+                    <div id="navbarBasicExample2" class="navbar-menu">
+                        <div class="navbar-start">
+                            <div class="navbar-item has-dropdown is-hoverable cat">
+                                <div class="navbar-link">
+                                    <a class="" href="/products">Каталог</a>
+                                </div>
+
+                                <div class="navbar-dropdown">
+                                    {{ range .Categories}}
+                                        <a class="navbar-item" href="/categories/{{.CatLatin}}">
+                                            {{.CatCyrillic}}
+                                        </a>
+                                    {{end}}
+                                </div>
+                            </div>
+                            <div class="navbar-item ">
+                                <a href="/filter">Подобрать фильтр</a>
+                            </div>
+                            <div class="navbar-item">
+                                <a>О нас</a>
+                            </div>
+                            <div class="navbar-item">
+                                <a>Оплата и доставка</a>
+                            </div>
+
+                        </div>
+
+                        <div class="navbar-end">
+                            <div class="navbar-item">
+                                <i class="fa-brands fa-telegram"></i>
+                                <i class="fas fa-phone-alt"></i>
+                                <a href="tel:+375299047668"> +375 29 9047668</a>
+                                <span class="button  modal-button "
+                                      data-target="telegram-card">Заказать обратную связь</span>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
             </div>
-          </div>
         </div>
-      </nav>
     </div>
-  </div>
-</div>
 
-</div>
-<div id="telegram-card" class="modal modal-fx-3dSlit">
-  <div class="modal-background"></div>
-  <div class="modal-content is-tiny">
-    <!-- content -->
-    <div class="card">
-      <div class="card-image">
+    <div id="telegram-card" class="modal modal-fx-3dSlit">
+        <div class="modal-background"></div>
+        <div class="modal-content is-tiny">
+            <!-- content -->
+            <div class="card">
+                <div class="card-image">
 
-      </div>
-      <div class="card-content">
-        <h1>Оставте номер и мы Вам перезвоним</h1>
+                </div>
+                <div class="card-content">
+                    <h1>Оставте номер и мы Вам перезвоним</h1>
 
-        <textarea id="message" placeholder="Введите номер телефона" rows="4" cols="50"></textarea><br><br>
-        <p class="has-text-centered">
-          <span class="button  modal-button is-primary " onclick="sendMessage()">Отправить сообщение</span>
-        </p>
-        <p id="status"></p>
+                    <textarea id="message" placeholder="Введите номер телефона" rows="4" cols="50"></textarea><br><br>
+                    <p class="has-text-centered">
+                        <span class="button  modal-button is-primary "
+                              onclick="sendMessage()">Отправить сообщение</span>
 
-        <script src="/static/js/telegram.js"></script>
-      </div>
+                    </p>
+                    <p id="status"></p>
+
+                    <script src="/static/js/telegram.js"></script>
+                </div>
+            </div>
+        </div>
+        <!-- end content -->
     </div>
-  </div>
-  <!-- end content -->
-</div>
+
 {{ end }}
