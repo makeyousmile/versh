@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/xuri/excelize/v2"
+	"html/template"
 	"log"
 )
 
@@ -51,9 +52,170 @@ type Product struct {
 	MPNNumber           string `json:"номер_устройства_(mpn)"`
 	SupplierName        string `json:"название_поставщика"`
 	SupplierAddress     string `json:"адрес_поставщика"`
+	Category            string `json:"категория"`
+	CurCategory         string `json:"текущая_категория"`
 }
 
-func ReadExcel(path string) []Product {
+type Site struct {
+	Products   []Product
+	Product    Product
+	Title      string
+	Rows       int
+	Text       template.HTML
+	Categories []Categories
+	Articles   []Article
+}
+type Article struct {
+	Title string
+	Text  template.HTML
+}
+
+func getSiteFromExel(path string) Site {
+
+	//берем статьи из вкладки Articles
+	site := Site{}
+	article := make([]Article, 0)
+	f, err := excelize.OpenFile(path)
+	if err != nil {
+		log.Println(err)
+	}
+	defer func() {
+		// Close the spreadsheet.
+		if err := f.Close(); err != nil {
+			fmt.Println(err)
+		}
+	}()
+
+	rows, err := f.GetRows("Articles")
+	if err != nil {
+		log.Println(err)
+	}
+	article = append(article, Article{
+		Title: rows[1][0],
+		Text:  template.HTML(rows[2][0]),
+	})
+	article = append(article, Article{
+		Title: rows[1][1],
+		Text:  template.HTML(rows[2][1]),
+	})
+	site.Articles = article
+
+	//берем продукцию из вкладки Export Products Sheet
+	products := make([]Product, 0)
+
+	// Get all the rows in the Sheet1.
+	productRows, err := f.GetRows("Export Products Sheet")
+	if err != nil {
+		fmt.Println(err)
+
+	}
+	for x, row := range productRows {
+		if x == 0 {
+			continue
+		}
+		product := Product{}
+		for y, cell := range row {
+
+			switch y {
+			case 0:
+				product.Code = cell
+			case 1:
+				product.Name = cell
+			case 2:
+				product.SearchQueries = cell
+			case 3:
+				product.Description = cell
+			case 4:
+				product.ProductType = cell
+			case 5:
+				product.Price = cell
+			case 6:
+				product.Currency = cell
+			case 7:
+				product.UnitOfMeasurement = cell
+			case 8:
+				product.MinOrderVolume = cell
+			case 9:
+				product.WholesalePrice = cell
+			case 10:
+				product.MinWholesaleOrder = cell
+			case 11:
+				product.ImageURL = cell
+			case 12:
+				product.Availability = cell
+			case 13:
+				product.Quantity = cell
+			case 14:
+				product.GroupID = cell
+			case 15:
+				product.GroupName = cell
+			case 16:
+				product.SubsectionURL = cell
+			case 17:
+				product.SupplyCapability = cell
+			case 18:
+				product.DeliveryTime = cell
+			case 19:
+				product.PackagingMethod = cell
+			case 20:
+				product.UniqueIdentifier = cell
+			case 21:
+				product.ItemID = cell
+			case 22:
+				product.SubsectionID = cell
+			case 23:
+				product.GroupIdentifier = cell
+			case 24:
+				product.Manufacturer = cell
+			case 25:
+				product.WarrantyPeriod = cell
+			case 26:
+				product.CountryOfOrigin = cell
+			case 27:
+				product.Discount = cell
+			case 28:
+				product.VariantGroupID = cell
+			case 29:
+				product.ManufacturerName = cell
+			case 30:
+				product.ManufacturerAddress = cell
+			case 31:
+				product.PersonalNotes = cell
+			case 32:
+				product.ProductOnSite = cell
+			case 33:
+				product.DiscountStartDate = cell
+			case 34:
+				product.DiscountEndDate = cell
+			case 35:
+				product.PriceFrom = cell
+			case 36:
+				product.Label = cell
+			case 37:
+				product.HTMLTitle = cell
+			case 38:
+				product.HTMLDescription = cell
+			case 39:
+				product.GTINCode = cell
+			case 40:
+				product.MPNNumber = cell
+			case 41:
+				product.SupplierName = cell
+			case 42:
+				product.SupplierAddress = cell
+			}
+
+		}
+		product.Category = Transliterate(product.GroupName)
+		products = append(products, product)
+	}
+	site.Categories = getCats(products)
+	site.Products = products
+	return site
+
+}
+
+func GetProductsFromExcel(path string) []Product {
 	products := make([]Product, 0)
 	f, err := excelize.OpenFile(path)
 	if err != nil {
@@ -183,7 +345,7 @@ func getCats(products []Product) []Categories {
 		log.Printf(product.Name)
 	}
 
-	for c, _ := range cat {
+	for c := range cat {
 		categories = append(categories, c)
 	}
 

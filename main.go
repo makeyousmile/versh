@@ -1,13 +1,14 @@
 package main
 
-var page = Page{}
+var (
+	site     = Site{}
+	exelFile = "export.xlsx"
+)
 
 func init() {
-	products := ReadExcel("export.xlsx")
-	page.Products = products
-	page.Title = "ОАО ВЕРШ"
-	page.Categories = getCats(products)
+	site = getSiteFromExel(exelFile)
 }
 func main() {
+	//getPagesFromExel("export.xlsx")
 	startHttpServer()
 }

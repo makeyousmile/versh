@@ -13,13 +13,7 @@ type Categories struct {
 	CatCyrillic string
 	CatLatin    string
 }
-type Page struct {
-	Products   []Product
-	Product    Product
-	Title      string
-	Rows       int
-	Categories []Categories
-}
+
 type FormData struct {
 	Name        string
 	Phone       string
@@ -33,7 +27,7 @@ type FormData struct {
 	SewerType   string
 }
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
+func indexHandler(w http.ResponseWriter, _ *http.Request) {
 
 	tmpl, err := template.ParseFiles("static/index.html", "static/products.gohtml", "static/head.gohtml", "static/footer.gohtml", "static/filter.gohtml")
 	if err != nil {
@@ -43,19 +37,19 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Данные для передачи в шаблон (при необходимости)
-	tmpPage := page
-	tmpPage.Products = getPopularProducts(tmpPage.Products)
-	tmpPage.Title = "Популярные товары"
+	tmpSite := site
+	tmpSite.Products = getPopularProducts(tmpSite.Products)
+	tmpSite.Title = "Популярные товары"
 
 	// Рендерим шаблон с данными
-	err = tmpl.Execute(w, tmpPage)
+	err = tmpl.Execute(w, tmpSite)
 	if err != nil {
 		http.Error(w, "Unable to render template", http.StatusInternalServerError)
 		log.Println("Error rendering template:", err)
 		return
 	}
 }
-func productsHandler(w http.ResponseWriter, r *http.Request) {
+func productsHandler(w http.ResponseWriter, _ *http.Request) {
 	tmpl, err := template.ParseFiles("static/products.html", "static/products.gohtml", "static/head.gohtml", "static/footer.gohtml", "static/filter.gohtml")
 	if err != nil {
 		http.Error(w, "File not found or unable to load template", http.StatusNotFound)
@@ -65,10 +59,10 @@ func productsHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Данные для передачи в шаблон (при необходимости)
 
-	tmpPage := page
-	tmpPage.Title = "Каталог"
+	tmpSite := site
+	tmpSite.Title = "Каталог"
 	// Рендерим шаблон с данными
-	err = tmpl.Execute(w, tmpPage)
+	err = tmpl.Execute(w, tmpSite)
 	if err != nil {
 		http.Error(w, "Unable to render template", http.StatusInternalServerError)
 		log.Println("Error rendering template:", err)
@@ -89,20 +83,20 @@ func productHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("Error loading template:", err)
 		return
 	}
-	tmpPage := page
-	tmpPage.Product = FindProductByCode(tmpPage.Products, id)
-	if tmpPage.Product.Name == "" {
+	tmpSite := site
+	tmpSite.Product = FindProductByCode(tmpSite.Products, id)
+	if tmpSite.Product.Name == "" {
 		http.Error(w, "Product not found", http.StatusNotFound)
 	}
 
-	err = tmpl.Execute(w, tmpPage)
+	err = tmpl.Execute(w, tmpSite)
 	if err != nil {
 		log.Println("Error rendering template:", err)
 		http.Error(w, "Unable to render template", http.StatusInternalServerError)
 	}
 
 }
-func filterHandler(w http.ResponseWriter, r *http.Request) {
+func filterHandler(w http.ResponseWriter, _ *http.Request) {
 	tmpl, err := template.ParseFiles("static/filter.html", "static/head.gohtml", "static/footer.gohtml", "static/filter.gohtml")
 	if err != nil {
 		http.Error(w, "File not found or unable to load template", http.StatusNotFound)
@@ -110,10 +104,10 @@ func filterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tmpPage := page
-	tmpPage.Title = "Фильтр"
+	tmpSite := site
+	tmpSite.Title = "Фильтр"
 	// Рендерим шаблон с данными
-	err = tmpl.Execute(w, tmpPage)
+	err = tmpl.Execute(w, tmpSite)
 	if err != nil {
 		http.Error(w, "Unable to render template", http.StatusInternalServerError)
 		log.Println("Error rendering template:", err)
@@ -134,14 +128,14 @@ func categoriesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Данные для передачи в шаблон (при необходимости)
-	tmpPage := page
+	tmpSite := site
 
-	tmpPage.Products = FindProductByCat(tmpPage.Products, cat)
-	if len(tmpPage.Products) > 0 {
-		tmpPage.Title = tmpPage.Products[0].GroupName
+	tmpSite.Products = FindProductByCat(tmpSite.Products, cat)
+	if len(tmpSite.Products) > 0 {
+		tmpSite.Title = tmpSite.Products[0].GroupName
 	}
 	// Рендерим шаблон с данными
-	err = tmpl.Execute(w, tmpPage)
+	err = tmpl.Execute(w, tmpSite)
 	if err != nil {
 		http.Error(w, "Unable to render template", http.StatusInternalServerError)
 		log.Println("Error rendering template:", err)
@@ -151,7 +145,10 @@ func categoriesHandler(w http.ResponseWriter, r *http.Request) {
 
 func formHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
-		r.ParseMultipartForm(10 << 20) // 10 MB max file size
+		err := r.ParseMultipartForm(10 << 20)
+		if err != nil {
+			return
+		} // 10 MB max file size
 
 		data := FormData{
 			Name:        r.FormValue("name"),
@@ -185,7 +182,47 @@ func formHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tmpl := template.Must(template.ParseFiles("filter 1.html"))
-	tmpl.Execute(w, nil)
+	err := tmpl.Execute(w, nil)
+	if err != nil {
+		return
+	}
+}
+
+func articleHandler(w http.ResponseWriter, r *http.Request) {
+	cat := strings.TrimPrefix(r.URL.Path, "/article/")
+	if cat == "" {
+		http.Error(w, "article is missing", http.StatusBadRequest)
+		return
+	}
+	tmpl, err := template.ParseFiles("static/article.html", "static/head.gohtml", "static/footer.gohtml")
+	if err != nil {
+		http.Error(w, "File not found or unable to load template", http.StatusNotFound)
+		log.Println("Error loading template:", err)
+		return
+	}
+
+	// Данные для передачи в шаблон (при необходимости)
+	tmpSite := site
+	if cat == "about" {
+		tmpSite.Text = template.HTML(tmpSite.Articles[0].Text)
+		tmpSite.Title = tmpSite.Articles[0].Title
+	}
+	if cat == "shipment" {
+		tmpSite.Text = tmpSite.Articles[1].Text
+		tmpSite.Title = tmpSite.Articles[1].Title
+	}
+
+	// Рендерим шаблон с данными
+	err = tmpl.Execute(w, tmpSite)
+
+	if err != nil {
+		http.Error(w, "Unable to render template", http.StatusInternalServerError)
+		log.Println("Error rendering template:", err)
+		return
+	}
+}
+func reloadHandler(writer http.ResponseWriter, request *http.Request) {
+	site = getSiteFromExel(exelFile)
 }
 
 func startHttpServer() {
@@ -196,6 +233,8 @@ func startHttpServer() {
 	http.HandleFunc("/filter/", filterHandler)
 	http.HandleFunc("/categories/", categoriesHandler)
 	http.HandleFunc("/submit", formHandler)
+	http.HandleFunc("/article/", articleHandler)
+	http.HandleFunc("/reload/", reloadHandler)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 	// Запускаем сервер на порту 8080
 	log.Println("Starting server on :80")

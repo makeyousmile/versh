@@ -1,3 +1,67 @@
 {{template "head" .}}
+<div class="section">
+<div class="container is-8 is-centered form-container">
+<div class="field is-grouped is-justify-content-center mb-5">
+    <div class="control">
+        <div class="select">
+            <select id="categoryFilter">
+                <option value="all">Все категории</option>
+                {{ range .Categories }}
+                <option value="{{ .CatLatin }}">{{ .CatCyrillic }}</option>
+                {{ end }}
+            </select>
+        </div>
+    </div>
+</div>
+    <div class="buttons is-centered mb-4">
+        <button class="button is-link category-button" data-category="all">Все категории</button>
+        {{ range .Categories }}
+        <button class="button  category-button" data-category="{{ .CatLatin }}">{{ .CatCyrillic }}</button>
+        {{ end }}
+    </div>
+</div>
+
+
+</div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const filter = document.getElementById("categoryFilter");
+        const products = document.querySelectorAll(".product-card");
+        const buttons = document.querySelectorAll(".category-button");
+
+        function filterProducts(selected) {
+            products.forEach(product => {
+                const category = product.getAttribute("data-category");
+                product.style.display = (selected === "all" || category === selected) ? "block" : "none";
+            });
+
+            // Обновляем активную кнопку
+            buttons.forEach(btn => {
+                if (btn.getAttribute("data-category") === selected) {
+                    btn.classList.add("is-link");
+                } else {
+                    btn.classList.remove("is-link");
+                }
+            });
+        }
+
+        filter.addEventListener("change", function () {
+            filterProducts(this.value);
+        });
+
+        buttons.forEach(button => {
+            button.addEventListener("click", function () {
+                const selected = this.getAttribute("data-category");
+                filter.value = selected; // синхронизируем select
+                filterProducts(selected);
+            });
+        });
+    });
+</script>
+
+
 {{ template "products" . }}
 {{template "footer"}}
