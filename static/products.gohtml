@@ -6,7 +6,7 @@
         <div class="columns is-multiline">
             {{ range $element := .Products }}
                 <a class="column is-one-quarter product-card" href="/product/{{ .Code}}" data-category="{{ .Category }}">
-                    <div class="card hover">
+                    <div class="card hover product-hover">
                         <div class="card-image">
                             <figure class="image is-4by3">
                                 <img src="{{ .ImageURL}}" alt="Product 1">

@@ -42,18 +42,21 @@
 
                     <div id="navbarBasicExample2" class="navbar-menu">
                         <div class="navbar-start">
-                            <div class="navbar-item has-dropdown is-hoverable cat">
-                                <div class="navbar-link">
-                                    <a class="" href="/products">Каталог</a>
-                                </div>
+{{/*                            <div class="navbar-item has-dropdown is-hoverable cat">*/}}
+{{/*                                <div class="navbar-link">*/}}
+{{/*                                    <a class="" href="/products">Каталог</a>*/}}
+{{/*                                </div>*/}}
 
-                                <div class="navbar-dropdown">
-                                    {{ range .Categories}}
-                                        <a class="navbar-item" href="/categories/{{.CatLatin}}">
-                                            {{.CatCyrillic}}
-                                        </a>
-                                    {{end}}
-                                </div>
+{{/*                                <div class="navbar-dropdown">*/}}
+{{/*                                    {{ range .Categories}}*/}}
+{{/*                                        <a class="navbar-item" href="/categories/{{.CatLatin}}">*/}}
+{{/*                                            {{.CatCyrillic}}*/}}
+{{/*                                        </a>*/}}
+{{/*                                    {{end}}*/}}
+{{/*                                </div>*/}}
+{{/*                            </div>*/}}
+                            <div class="navbar-item animated-button">
+                                <a class="" href="/products"><span class="button  modal-button" >Каталог</span></a>
                             </div>
                             <div class="navbar-item ">
                                 <a href="/filter">Подобрать фильтр</a>
@@ -84,18 +87,25 @@
 
     <div id="telegram-card" class="modal modal-fx-3dSlit">
         <div class="modal-background"></div>
-        <div class="modal-content is-tiny">
+        <div class="modal-content ">
             <!-- content -->
             <div class="card">
-                <div class="card-image">
-
-                </div>
+    
                 <div class="card-content">
                     <h1>Оставте номер и мы Вам перезвоним</h1>
 
-                    <textarea id="message" placeholder="Введите номер телефона" rows="4" cols="50"></textarea><br><br>
-                    <p class="has-text-centered">
-                        <span class="button  modal-button is-primary "
+
+                    <div class="">
+                        <div class="control has-icons-left">
+                            <input  id="message" class="input" max="6" type="tel" placeholder="+375 (__) ___-__-__" pattern="^\+375\s?\(?\d{2}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$" required>
+                            <span class="icon is-small is-left">
+      <i class="fas fa-phone"></i>
+    </span>
+                        </div>
+                        <p class="help">Введите номер в формате +375 (XX) XXX-XX-XX</p>
+                    </div>
+
+                    <span class="button  modal-button is-primary "
                               onclick="sendMessage()">Отправить сообщение</span>
 
                     </p>

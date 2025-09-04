@@ -204,7 +204,7 @@ func articleHandler(w http.ResponseWriter, r *http.Request) {
 	// Данные для передачи в шаблон (при необходимости)
 	tmpSite := site
 	if cat == "about" {
-		tmpSite.Text = template.HTML(tmpSite.Articles[0].Text)
+		tmpSite.Text = tmpSite.Articles[0].Text
 		tmpSite.Title = tmpSite.Articles[0].Title
 	}
 	if cat == "shipment" {
