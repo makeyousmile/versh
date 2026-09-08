@@ -87,7 +87,9 @@ func productHandler(w http.ResponseWriter, r *http.Request) {
 	tmpSite.Product = FindProductByCode(tmpSite.Products, id)
 	if tmpSite.Product.Name == "" {
 		http.Error(w, "Product not found", http.StatusNotFound)
+		return
 	}
+	tmpSite.Title = tmpSite.Product.Name
 
 	err = tmpl.Execute(w, tmpSite)
 	if err != nil {
@@ -181,9 +183,8 @@ func formHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tmpl := template.Must(template.ParseFiles("filter 1.html"))
-	err := tmpl.Execute(w, nil)
-	if err != nil {
+	if r.Method != http.MethodPost {
+		http.Redirect(w, r, "/filter", http.StatusSeeOther)
 		return
 	}
 }
@@ -203,11 +204,11 @@ func articleHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Данные для передачи в шаблон (при необходимости)
 	tmpSite := site
-	if cat == "about" {
+	if cat == "about" && len(tmpSite.Articles) > 0 {
 		tmpSite.Text = tmpSite.Articles[0].Text
 		tmpSite.Title = tmpSite.Articles[0].Title
 	}
-	if cat == "shipment" {
+	if cat == "shipment" && len(tmpSite.Articles) > 1 {
 		tmpSite.Text = tmpSite.Articles[1].Text
 		tmpSite.Title = tmpSite.Articles[1].Title
 	}
@@ -223,6 +224,8 @@ func articleHandler(w http.ResponseWriter, r *http.Request) {
 }
 func reloadHandler(writer http.ResponseWriter, request *http.Request) {
 	site = getSiteFromExel(exelFile)
+	log.Printf("Site reloaded with %d products from %s", len(site.Products), exelFile)
+	writer.Write([]byte("Site reloaded successfully\n"))
 }
 
 func startHttpServer() {
@@ -230,16 +233,23 @@ func startHttpServer() {
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/products", productsHandler)
 	http.HandleFunc("/product/", productHandler)
+	http.HandleFunc("/filter", filterHandler)
 	http.HandleFunc("/filter/", filterHandler)
 	http.HandleFunc("/categories/", categoriesHandler)
 	http.HandleFunc("/submit", formHandler)
 	http.HandleFunc("/article/", articleHandler)
 	http.HandleFunc("/reload/", reloadHandler)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
-	// Запускаем сервер на порту 8080
-	log.Println("Starting server on :80")
-	if err := http.ListenAndServe(":80", nil); err != nil {
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "80"
+	}
+	if !strings.HasPrefix(port, ":") {
+		port = ":" + port
+	}
+	log.Printf("Starting server on %s\n", port)
+	if err := http.ListenAndServe(port, nil); err != nil {
 		log.Fatal(err)
 	}
-
 }

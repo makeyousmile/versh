@@ -2,17 +2,25 @@
     <div class="container">
         <div class="columns is-vcentered mt-6">
             <div class="column is-half">
-                <figure class="image is-4by3">
-
-                    <img src="{{.Product.ImageURL}}" alt="{{.Product.ImageURL}}">
-
+                <figure class="image is-4by3 product-detail-image">
+                    <img src="{{.Product.ImageURL}}" alt="{{.Product.Name}}">
                 </figure>
             </div>
             <div class="column is-half">
                 <h1 class="title">{{.Product.Name}}</h1>
                 <p class="subtitle">Цена: <strong>{{.Product.Price}} BYN</strong></p>
-                <p class="mb-4">Идеально подходит для систем водоочистки, повышенной мягкости и долговечности.
-                    Совместима с большинством стандартных установок умягчения воды.</p>
+                {{if .Product.Availability}}
+                <p class="mb-2"><strong>Наличие:</strong> {{.Product.Availability}}</p>
+                {{end}}
+                {{if .Product.Manufacturer}}
+                <p class="mb-2"><strong>Бренд:</strong> {{.Product.Manufacturer}}</p>
+                {{end}}
+                {{if .Product.ItemID}}
+                <p class="mb-2"><strong>Артикул:</strong> {{.Product.ItemID}}</p>
+                {{end}}
+                {{if .Product.GroupName}}
+                <p class="mb-4"><strong>Категория:</strong> {{.Product.GroupName}}</p>
+                {{end}}
                 <button class="button is-primary is-large">Заказать</button>
             </div>
         </div>
@@ -20,7 +28,14 @@
         <hr>
 
         <div class="content mt-6">
-            
+            {{if .Product.Description}}
+                <h2 class="title is-4">Описание</h2>
+                <p style="white-space: pre-line;">{{.Product.Description}}</p>
+            {{end}}
+            {{if .Product.PersonalNotes}}
+                <h2 class="title is-4 mt-5">Характеристики</h2>
+                <p style="white-space: pre-line;">{{.Product.PersonalNotes}}</p>
+            {{end}}
         </div>
     </div>
 {{end}}

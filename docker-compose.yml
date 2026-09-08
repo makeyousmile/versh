@@ -1,0 +1,16 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: versh
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8080}:80"
+    environment:
+      - PORT=80
+      - EXCEL_FILE=${EXCEL_FILE:-export_v2.xlsx}
+    volumes:
+      - ./uploads:/app/uploads
+      - ./export_v2.xlsx:/app/export_v2.xlsx:ro
+      - ./static:/app/static:ro
